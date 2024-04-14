@@ -55,7 +55,7 @@ public class SimpleThreadPool {
         }
         synchronized (taskQueue) {
             taskQueue.add(task);
-            taskQueue.notify();
+            taskQueue.notifyAll();
         }
     }
 
