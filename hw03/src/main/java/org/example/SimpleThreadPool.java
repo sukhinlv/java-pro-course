@@ -62,6 +62,7 @@ public class SimpleThreadPool {
     public void shutdown() {
         isShutdown = true;
         synchronized (taskQueue) {
+            taskQueue.clear();
             taskQueue.notifyAll();
         }
     }
