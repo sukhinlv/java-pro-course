@@ -84,9 +84,9 @@ public class UserDao implements Dao<User, Long> {
         List<User> users = new ArrayList<>();
         String sql = "SELECT * FROM %s".formatted(tableName);
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql);
 
-            ResultSet resultSet = statement.executeQuery();
+             ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 users.add(getUserFromResultSet(resultSet));
             }

@@ -1,0 +1,21 @@
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  max-http-request-header-size: 40KB
+  shutdown: ${SHUTDOWN:graceful}
+  port: 8090
+
+spring:
+  web:
+    resources:
+      add-mappings: false
+  lifecycle:
+    timeout-per-shutdown-phase: ${TIMEOUT_PER_SHUTDOWN_PHASE:10s}
+  datasource:
+    url: ${POSTGRES_URL}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver

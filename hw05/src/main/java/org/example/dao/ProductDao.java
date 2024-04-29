@@ -1,7 +1,8 @@
 package org.example.dao;
 
 import org.example.annotations.Table;
-import org.example.dao.model.User;
+import org.example.dao.model.Product;
+import org.example.dao.model.ProductType;
 import org.example.error.DataAccessException;
 import org.springframework.stereotype.Repository;
 
@@ -16,14 +17,14 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Repository
-public class UserDao implements Dao<User, Long> {
+public class ProductDao implements Dao<Product, Long> {
 
     private final DataSource dataSource;
     private final String tableName;
 
-    public UserDao(DataSource dataSource) {
+    public ProductDao(DataSource dataSource) {
         this.dataSource = dataSource;
-        Class<User> aClass = User.class;
+        Class<Product> aClass = Product.class;
         if (!aClass.isAnnotationPresent(Table.class)) {
             throw new RuntimeException("Table " + aClass.getSimpleName() + " is not annotated with @Table");
         }
@@ -31,7 +32,7 @@ public class UserDao implements Dao<User, Long> {
     }
 
     @Override
-    public Optional<User> findById(Long id) {
+    public Optional<Product> findById(Long id) {
         Objects.requireNonNull(id);
         String sql = "SELECT * FROM %s WHERE id = ?".formatted(tableName);
         try (Connection connection = dataSource.getConnection();
@@ -40,7 +41,7 @@ public class UserDao implements Dao<User, Long> {
             statement.setLong(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    return Optional.of(getUserFromResultSet(resultSet));
+                    return Optional.of(getProductFromResultSet(resultSet));
                 }
             }
         } catch (SQLException e) {
@@ -50,15 +51,27 @@ public class UserDao implements Dao<User, Long> {
     }
 
     @Override
-    public void save(User user) {
-        Objects.requireNonNull(user);
-        String sql = "INSERT INTO %s (id, username) VALUES (?, ?) ON CONFLICT (id) DO UPDATE SET username = ?".formatted(tableName);
+    public void save(Product product) {
+        Objects.requireNonNull(product);
+        String sql = """
+                    INSERT INTO %s (id, user_id, account, balance, product_type)
+                    VALUES (?, ?, ?, ?, ?)
+                    ON CONFLICT (id) DO UPDATE SET user_id = ?, account = ?, balance = ?, product_type = ?
+                """
+                .formatted(tableName);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setLong(1, user.getId());
-            statement.setString(2, user.getUsername());
-            statement.setString(3, user.getUsername());
+            int i = 1;
+            statement.setLong(i++, product.getId());
+            statement.setLong(i++, product.getUserId());
+            statement.setString(i++, product.getAccount());
+            statement.setLong(i++, product.getBalance());
+            statement.setShort(i++, product.getProductType().getId());
+            statement.setLong(i++, product.getUserId());
+            statement.setString(i++, product.getAccount());
+            statement.setLong(i++, product.getBalance());
+            statement.setShort(i++, product.getProductType().getId());
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccessException(e);
@@ -80,23 +93,46 @@ public class UserDao implements Dao<User, Long> {
     }
 
     @Override
-    public List<User> findAll() {
-        List<User> users = new ArrayList<>();
+    public List<Product> findAll() {
+        List<Product> products = new ArrayList<>();
         String sql = "SELECT * FROM %s".formatted(tableName);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                users.add(getUserFromResultSet(resultSet));
+                products.add(getProductFromResultSet(resultSet));
             }
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }
-        return users;
+        return products;
     }
 
-    private static User getUserFromResultSet(ResultSet resultSet) throws SQLException {
-        return new User(resultSet.getLong("id"), resultSet.getString("username"));
+    public List<Product> findAllByUserId(long userId) {
+        List<Product> products = new ArrayList<>();
+        String sql = "SELECT * FROM %s WHERE user_id = ?".formatted(tableName);
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setLong(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                products.add(getProductFromResultSet(resultSet));
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+        return products;
+    }
+
+    private static Product getProductFromResultSet(ResultSet resultSet) throws SQLException {
+        return new Product(
+                resultSet.getLong("id"),
+                resultSet.getLong("user_id"),
+                resultSet.getString("account"),
+                resultSet.getLong("balance"),
+                ProductType.fromValue(resultSet.getShort("product_type"))
+        );
     }
 }

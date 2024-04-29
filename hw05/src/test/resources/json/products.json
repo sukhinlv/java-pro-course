@@ -1,0 +1,16 @@
+[
+  {
+    "id": 3,
+    "userId": 125,
+    "account": "1233211233211235",
+    "balance": 55000,
+    "productType": 1
+  },
+  {
+    "id": 4,
+    "userId": 125,
+    "account": "9876556789123431",
+    "balance": 10,
+    "productType": 2
+  }
+]

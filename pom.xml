@@ -21,6 +21,7 @@
         <module>hw02</module>
         <module>hw03</module>
         <module>hw04</module>
+        <module>hw05</module>
     </modules>
 
     <properties>
@@ -30,6 +31,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
+        <spring-boot-dependencies.version>3.2.4</spring-boot-dependencies.version>
+        <spring-boot-maven-plugin.version>${spring-boot-dependencies.version}</spring-boot-maven-plugin.version>
         <spring.version>6.1.6</spring.version>
         <snakeyaml.version>2.2</snakeyaml.version>
         <HikariCP.version>5.1.0</HikariCP.version>
@@ -37,10 +40,18 @@
         <slf4j.version>2.0.13</slf4j.version>
         <testcontainers.version>1.19.5</testcontainers.version>
         <junit-jupiter.version>5.10.2</junit-jupiter.version>
+        <rest-assured.version>5.4.0</rest-assured.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context</artifactId>
@@ -103,7 +114,6 @@
                 <scope>test</scope>
             </dependency>
         </dependencies>
-
     </dependencyManagement>
 
     <build>
