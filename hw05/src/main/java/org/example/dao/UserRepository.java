@@ -16,12 +16,12 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Repository
-public class UserDao implements Dao<User, Long> {
+public class UserRepository implements AbstractRepository<User, Long> {
 
     private final DataSource dataSource;
     private final String tableName;
 
-    public UserDao(DataSource dataSource) {
+    public UserRepository(DataSource dataSource) {
         this.dataSource = dataSource;
         Class<User> aClass = User.class;
         if (!aClass.isAnnotationPresent(Table.class)) {

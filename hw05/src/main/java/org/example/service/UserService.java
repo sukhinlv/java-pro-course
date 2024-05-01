@@ -1,6 +1,6 @@
 package org.example.service;
 
-import org.example.dao.UserDao;
+import org.example.dao.UserRepository;
 import org.example.dao.model.User;
 import org.example.error.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -11,27 +11,27 @@ import java.util.Objects;
 @Service
 public class UserService {
 
-    private final UserDao userDao;
+    private final UserRepository userRepository;
 
-    public UserService(UserDao userDao) {
-        this.userDao = userDao;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     public User getUserById(long id) {
-        return userDao.findById(id)
+        return userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User with id %d not found".formatted(id)));
     }
 
     public void saveUser(User user) {
         Objects.requireNonNull(user);
-        userDao.save(user);
+        userRepository.save(user);
     }
 
     public void deleteUserById(long id) {
-        userDao.deleteById(id);
+        userRepository.deleteById(id);
     }
 
     public List<User> getAllUsers() {
-        return userDao.findAll();
+        return userRepository.findAll();
     }
 }

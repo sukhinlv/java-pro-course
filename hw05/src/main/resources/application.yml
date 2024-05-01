@@ -6,7 +6,6 @@ server:
       force: true
   max-http-request-header-size: 40KB
   shutdown: ${SHUTDOWN:graceful}
-  port: 8090
 
 spring:
   web:

@@ -1,6 +1,6 @@
 package org.example.service;
 
-import org.example.dao.ProductDao;
+import org.example.dao.ProductRepository;
 import org.example.dao.model.Product;
 import org.example.error.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -10,18 +10,18 @@ import java.util.List;
 @Service
 public class ProductService {
 
-    private final ProductDao productDao;
+    private final ProductRepository productRepository;
 
-    public ProductService(ProductDao productDao) {
-        this.productDao = productDao;
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
     public List<Product> findByUserId(long userId) {
-        return productDao.findAllByUserId(userId);
+        return productRepository.findAllByUserId(userId);
     }
 
     public Product findById(long id) {
-        return productDao.findById(id)
+        return productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Product with id %d not found".formatted(id)));
     }
 }

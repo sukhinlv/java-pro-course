@@ -2,7 +2,6 @@ package org.example.controller;
 
 import org.example.dao.model.Product;
 import org.example.service.ProductService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,12 +22,12 @@ public class ProductController {
     }
 
     @GetMapping("/by-user")
-    public ResponseEntity<List<Product>> findByUserId(@RequestParam(value = "userId") long userId) {
-        return ResponseEntity.ok(productService.findByUserId(userId));
+    public List<Product> findByUserId(@RequestParam(value = "userId") long userId) {
+        return productService.findByUserId(userId);
     }
 
     @GetMapping("/")
-    public ResponseEntity<Product> findById(@RequestParam(value = "id") long id) {
-        return ResponseEntity.ok(productService.findById(id));
+    public Product findById(@RequestParam(value = "id") long id) {
+        return productService.findById(id);
     }
 }

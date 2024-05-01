@@ -17,12 +17,12 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Repository
-public class ProductDao implements Dao<Product, Long> {
+public class ProductRepository implements AbstractRepository<Product, Long> {
 
     private final DataSource dataSource;
     private final String tableName;
 
-    public ProductDao(DataSource dataSource) {
+    public ProductRepository(DataSource dataSource) {
         this.dataSource = dataSource;
         Class<Product> aClass = Product.class;
         if (!aClass.isAnnotationPresent(Table.class)) {

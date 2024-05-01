@@ -3,7 +3,7 @@ package org.example.dao;
 import java.util.List;
 import java.util.Optional;
 
-public interface Dao<T, K> {
+public interface AbstractRepository<T, K> {
 
     Optional<T> findById(K id);
     void save(T t);
