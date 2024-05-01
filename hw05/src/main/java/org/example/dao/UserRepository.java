@@ -16,12 +16,12 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Repository
-public class UserDao implements Dao<User, Long> {
+public class UserRepository implements AbstractRepository<User, Long> {
 
     private final DataSource dataSource;
     private final String tableName;
 
-    public UserDao(DataSource dataSource) {
+    public UserRepository(DataSource dataSource) {
         this.dataSource = dataSource;
         Class<User> aClass = User.class;
         if (!aClass.isAnnotationPresent(Table.class)) {
@@ -84,9 +84,9 @@ public class UserDao implements Dao<User, Long> {
         List<User> users = new ArrayList<>();
         String sql = "SELECT * FROM %s".formatted(tableName);
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql);
 
-            ResultSet resultSet = statement.executeQuery();
+             ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 users.add(getUserFromResultSet(resultSet));
             }
