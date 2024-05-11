@@ -1,0 +1,40 @@
+server:
+  port: ${APP_PORT:8095}
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  max-http-request-header-size: 40KB
+  shutdown: ${SHUTDOWN:graceful}
+  error:
+    whitelabel:
+      enabled: false
+
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: ${TIMEOUT_PER_SHUTDOWN_PHASE:10s}
+  application:
+    name: hw06_payment_service
+  servlet:
+    multipart:
+      max-file-size: ${MULTIPART_FILE_MAX:10MB}
+      max-request-size: ${MULTIPART_REQUEST_MAX:10MB}
+  web:
+    resources:
+      add-mappings: false
+
+logging:
+  level:
+    ROOT: ${LOGGING_LEVEL_ROOT:info}
+    org.example: ${LOGGING_LEVEL:debug}
+
+springdoc:
+  api-docs:
+    enabled: ${SWAGGER_ENABLED:true}
+  swagger-ui:
+    enabled: ${SWAGGER_ENABLED:true}
+    url: /payment-service-rest-v1.yaml # Документацию для Сваггера генерируем на основе спецификации
+
+product-service:
+  base-url: ${PRODUCT_SERVICE_BASE_URL:http://localhost:8090}
