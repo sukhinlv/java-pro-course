@@ -1,0 +1,20 @@
+[
+  {
+    "id": 3,
+    "account": "1233211233211235",
+    "balance": 55000,
+    "productType": {
+      "id": 1,
+      "name": "Счет"
+    }
+  },
+  {
+    "id": 4,
+    "account": "9876556789123431",
+    "balance": 10,
+    "productType": {
+      "id": 2,
+      "name": "Карта"
+    }
+  }
+]
