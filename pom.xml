@@ -24,6 +24,8 @@
         <module>hw05</module>
         <module>hw06_payment_service</module>
         <module>hw06_product_service</module>
+        <module>hw07_payment_service</module>
+        <module>hw07_product_service</module>
     </modules>
 
     <properties>
